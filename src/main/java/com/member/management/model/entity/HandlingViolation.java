@@ -24,7 +24,7 @@ public class HandlingViolation {
     private String handlingMethod;
 
     @Column(name = "SoTien")
-    private int amount;
+    private Integer amount;
 
     @Column(name = "NgayXL")
     private LocalDateTime handlingDate;

@@ -9,5 +9,11 @@ spring:
     show-sql: true
     hibernate.ddl-auto: update
 
+  thymeleaf:
+    enabled: true
+    check-template-location: true
+
 server:
   port: 8888
+
+

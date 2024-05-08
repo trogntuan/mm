@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Trạng thái vi phạm</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar-->
+    <div class="border-end bg-white" id="sidebar-wrapper">
+        <div class="sidebar-heading border-bottom bg-light">Quản lý thành viên</div>
+        <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/user/borrowing-device}">Thiết bị đang mượn</b></a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/user/usage-information}">Lịch sử đặt chỗ thiết bi</a>
+            <a class="list-group-item list-group-item-action list-group-item-light p-3" th:href="@{/user/violations}">Trạng thái vi phạm</a>
+        </div>
+    </div>
+    <!-- Page content wrapper-->
+    <div id="page-content-wrapper">
+        <!-- Top navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <div class="container-fluid">
+                <button class="btn btn-primary" id="sidebarToggle">Toggle Menu</button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                        <!--                                <li class="nav-item active"><a class="nav-link" href="#!">Home</a></li>-->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Xin chào, <span th:text="${name}"></span></a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" th:href="@{/user/change-password}">Đổi mật khẩu</a>
+                                <div class="dropdown-divider"></div>
+                                <form method="post" th:action="@{/logout}">
+                                    <button class="dropdown-item" type="submit">Đăng xuất</button>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Page content-->
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h3 class="h3">Trạng thái vi phạm</h3>
+            </div>
+            <div th:if="${violations.getTotalElements() == 0}">
+                <div class="alert alert-warning" role="alert">
+                    Không có dữ liệu
+                </div>
+            </div>
+            <div th:if="${violations.getTotalElements() > 0}">
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Hình thức xử lý</th>
+                            <th scope="col">Số tiền</th>
+                            <th scope="col">Ngày xử lý</th>
+                            <th scope="col">Trạng thái</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="violation, iter : ${violations.getContent()}">
+                            <td th:text="${violations.getPageable().getPageNumber() * violations.getPageable().getPageSize() + 1 + iter.index}"></td>
+                            <td th:text="${violation.id}"></td>
+                            <td th:text="${violation.handlingMethod}"></td>
+                            <td th:text="${violation.amount != null ? violation.amount + 'đ' : '0'}"></td>
+                            <td th:text="${violation.handlingDate}"></td>
+                            <td th:text="${violation.status == 0 ? 'Chưa xử lý' : 'Đã xử lý'}" th:class="${violation.status == 0 ? 'text-danger' : 'text-success'}"></td>
+                        </tbody>
+                    </table>
+
+                    <nav aria-label="Page navigation example" style="justify-content: center; display: flex;">
+                        <ul class="pagination">
+                            <th:block th:each="i : ${#numbers.sequence(0, violations.getTotalPages() - 1)}">
+                                <li class="page-item"><a class="page-link" th:href="@{/user/violations(page=${i})}" th:text="${i + 1}"></a></li>
+                            </th:block>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', event => {
+
+        // Toggle the side navigation
+        const sidebarToggle = document.body.querySelector('#sidebarToggle');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', event => {
+                event.preventDefault();
+                document.body.classList.toggle('sb-sidenav-toggled');
+                localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+            });
+        }
+
+    });
+</script>
+</body>
+</html>

@@ -58,8 +58,8 @@ public class AuthenticationController {
     @GetMapping("/home")
     public String home(HttpSession session, Model model) {
         User user = (User) session.getAttribute("loggedInUser");
-        model.addAttribute("name", user.getUsername());
-        model.addAttribute("id", user.getUsername());
+        String name = memberService.getNameById(user.getUsername());
+        model.addAttribute("name", name);
         return "/home";
     }
 

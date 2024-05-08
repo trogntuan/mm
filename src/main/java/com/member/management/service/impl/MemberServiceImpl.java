@@ -40,4 +40,24 @@ public class MemberServiceImpl implements MemberService {
     public String getNameById(String id) {
         return memberRepository.getNameById(id);
     }
+
+    @Override
+    public boolean checkPassword(String id, String oldPassword) {
+        Optional<Member> memberOptional = memberRepository.findById(id);
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            return passwordEncoder.matches(oldPassword, member.getPassword());
+        }
+        return false;
+    }
+
+    @Override
+    public void changePassword(String id, String newPassword) {
+        Optional<Member> memberOptional = memberRepository.findById(id);
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            member.setPassword(passwordEncoder.encode(newPassword));
+            memberRepository.save(member);
+        }
+    }
 }
