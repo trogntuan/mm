@@ -1,5 +1,6 @@
 package com.member.management.security;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,10 +26,14 @@ public class SecurityConfiguration {
                 .usernameParameter("id")
                 .passwordParameter("password")
                 .failureUrl("/login?error=true")
-                .defaultSuccessUrl("/user", true)
+                .successHandler(((request, response, authentication) -> {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("loggedInUser", authentication.getPrincipal());
+                    response.sendRedirect("/home");
+                }))
                 .permitAll()
-        ).logout(logout -> logout.
-                logoutUrl("/logout")
+        ).logout(logout -> logout
+                .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
                 .clearAuthentication(true)
                 .invalidateHttpSession(true)
@@ -36,6 +41,9 @@ public class SecurityConfiguration {
                 .permitAll()
         ).authorizeHttpRequests(request -> request
                 .requestMatchers("/user/**").authenticated()
+                .requestMatchers("/home").authenticated()
+                .requestMatchers("/register/**").permitAll()
+                .requestMatchers("/login").permitAll()
                 .anyRequest().authenticated()
         );
         return http.build();

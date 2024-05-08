@@ -13,30 +13,42 @@
         <div class="col-md-8 col-lg-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title" style="display: flex; justify-content: center">Đăng ký thành viên</h5>
-                    <h6 class="card-subtitle mb-3 mt-2 small text-muted" style="display: flex; justify-content: center">Đăng nhập với MSSV và mật khẩu</h6>
-                    <form method="POST"
-                          th:action="@{/register}">
+                    <h4 class="card-title" style="display: flex; justify-content: center; margin-bottom: 25px; margin-top: 10px">Đăng ký thành viên</h4>
+                    <form method="POST" th:action="@{/register/save}" th:object="${memberDto}">
                         <div class="mb-3">
-                            <input type="text" name="id" placeholder="Mã số sinh viên" required class="form-control" />
+                            <label class="w-100">
+                                <input type="text" th:field="*{id}" placeholder="Mã số sinh viên" required class="form-control">
+                            </label>
                         </div>
                         <div class="mb-3">
-                            <input type="text" name="name" placeholder="Họ tên" required class="form-control" />
+                            <label class="w-100">
+                                <input type="text" th:field="*{name}" placeholder="Họ tên" required class="form-control">
+                            </label>
                         </div>
                         <div class="mb-3">
-                            <input type="text" name="department" placeholder="Ngành" class="form-control" />
+                            <label class="w-100">
+                                <input type="text" th:field="*{department}" placeholder="Khoa" class="form-control">
+                            </label>
                         </div>
                         <div class="mb-3">
-                            <input type="text" name="major" placeholder="Khoa" class="form-control" />
+                            <label class="w-100">
+                                <input type="text" th:field="*{major}" placeholder="Ngành" class="form-control">
+                            </label>
                         </div>
                         <div class="mb-3">
-                            <input type="text" name="phone" placeholder="Số điện thoại" class="form-control" />
+                            <label class="w-100">
+                                <input type="text" th:field="*{phone}" placeholder="Số điện thoại" class="form-control">
+                            </label>
                         </div>
                         <div class="mb-3">
-                            <input type="password" name="password" id="password" placeholder="Mật khẩu" required class="form-control" />
+                            <label class="w-100">
+                                <input type="password" th:field="*{password}" placeholder="Mật khẩu" required class="form-control" id="password">
+                            </label>
                         </div>
                         <div class="mb-3">
-                            <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Nhập lại mật khẩu" required class="form-control" />
+                            <label class="w-100">
+                                <input type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu" required class="form-control" id="confirmPassword">
+                            </label>
                         </div>
                             <script>
                                 const password = document.getElementById("password");
@@ -44,7 +56,7 @@
 
                                 function validatePassword(){
                                     if(password.value !== confirm_password.value) {
-                                        confirm_password.setCustomValidity("Passwords Don't Match");
+                                        confirm_password.setCustomValidity("Mật khẩu nhập lại không khớp");
                                     } else {
                                         confirm_password.setCustomValidity('');
                                     }
@@ -52,14 +64,12 @@
                                 password.onchange = validatePassword;
                                 confirm_password.onkeyup = validatePassword;
                             </script>
-                        <div th:if="${param.error}">
-                            <p class="alert alert-danger" th:text="Mã số sinh viên đã tồn tại"></p>
+                        <div th:if="${errorMessage}">
+                            <p class="alert alert-danger" th:text="${errorMessage}"></p>
                         </div>
                         <button type="submit" class="btn btn-success w-100">Đăng ký thành viên</button>
                     </form>
-                    <div class="d-flex justify-content-between mt-3">
-                        <button type="button" class="btn btn-primary w-100" onclick="window.location.href='/register'">Đăng ký thành viên</button>
-                    </div>
+                    <a class="small" href="/login" style="display: flex; justify-content: center; margin: 20px">Đã có tài khoản, đăng nhập!</a>
                 </div>
             </div>
         </div>

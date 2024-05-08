@@ -21,7 +21,7 @@ public class Member {
 
     @Column(name = "Khoa", length = 100)
     @Nationalized
-    private String description;
+    private String department;
 
     @Column(name = "Nganh", length = 100)
     @Nationalized
